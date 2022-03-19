@@ -8,7 +8,7 @@ const config = {
   },
   header: {
     logo: '',
-    title: 'node-postgres',
+    title: 'EOPI-JS',
     githubUrl: 'https://github.com/brianc/node-postgres',
     helpUrl: '',
     tweetText: '',
@@ -19,7 +19,7 @@ const config = {
     links: [{ text: '', link: '' }],
   },
   siteMetadata: {
-    title: 'node-postgres',
+    title: 'EOPI-JS',
     description: 'Documentation for node-postgres, the postgres database client for node.js',
     ogImage: null,
     docsLocation: 'https://github.com/brianc/node-postgres-docs/tree/master/content',
