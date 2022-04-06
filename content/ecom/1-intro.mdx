@@ -1,0 +1,128 @@
+---
+title: Introduction
+slug: /ecom/intro
+---
+
+# Design an ecommerce web app
+
+## Features
+
+- see products list
+- view product details
+- add to cart
+- make an order
+- user profile
+- review products
+- search for products
+- add to wishlist
+
+## Design decision
+
+- Store data that does not require ACID properites in NoSQL database like MongoDB for scalability
+
+  - user profile
+  - products information
+  - user cart
+  - orders
+
+- Store data that require ACID in MySQL
+  - product availability
+
+```js
+// possible race condition: make an order
+
+async function purchaseNaive() {
+  // ...
+  const product = await findProduct(productId) // `SELECT * FROM products where product_id = :productId;`
+
+  if (product.quantity === 0) throw new Error('out of stock')
+
+  await chargeUser(userId, product.price) // calling payment service
+
+  const order = await createOrder(userId, product) // INSERT INTO orders ...
+
+  await clearCart()
+  // ...
+}
+
+// ^^^ Problems:
+// 2 users compete to buy the last item in store
+
+// Naive solution
+// 1. add contraint >= 0 for product.quantity
+// 2. reserve product before proceeding with purchasing
+async function purchaseNaive() {
+  // ...
+  const effectedRows = await reserveProduct(productId, quantity) // UPDATE products SET quantity = quantity - :quanitty where productId = :productId;
+
+  if (effectedRows === 0) throw new Error('out of stock')
+
+  await chargeUser(userId, product.price) // calling payment service
+
+  const order = await createOrder(userId, product) // INSERT INTO orders ...
+
+  await clearCart()
+  // ...
+}
+
+// ^^^ Problems:
+// 1. Failing at chargeUser or createOrder will lead to incorrect data
+
+// Solution: Wrap purchasing logic inside an transaction, if fails, changes are reverted
+async function purchase() {
+  // ...
+  transaction(() => {
+    const effectedRows = await reserveProduct(productId, quantity) // UPDATE products SET quantity = quantity - :quanitty where productId = :productId;
+
+    if (effectedRows === 0) throw new Error('out of stock')
+
+    await chargeUser(userId, product.price) // calling payment service
+
+    const order = await createOrder(userId, product) // INSERT INTO orders ...
+
+    await clearCart()
+  })
+  // ...
+}
+```
+
+## FEATURE: Product Review
+
+```js
+// naive way: use mapping collection
+// each record will store 1 rating from 1 user over 1 product
+reviews: {
+    id: ObjectId,
+    userId: ObjectId,
+    productId: ObjectId,
+    content: string,
+    rating: float
+    createdAt: timestamp
+    updatedAt: timestamp
+}
+
+// ^^^ Problem: need to traverse the whole `reviews` collection to find reviews and calculate average rating
+// Solution: keep a list of refs to `reviews` from a product record, keep current average rating and the number of ratings
+
+products: {
+    id: ObjectId,
+    title: string,
+    description: string,
+    price: float,
+    // ...
+    ratingTotal: float,
+    ratingCount: int,
+    reviews: [{ type: ObjectId, ref: 'Review' }]
+}
+```
+
+## Improvements
+
+- Product images:
+  - Use 2 versions (low and high quality): load low quality image first to reduce load time
+  - Store images in object store (s3)
+  - CDN: cache static content and serve it from nearest node to client.
+- Pre-populate tables: products by price range (index table)
+- Job queue:
+  - Add to cart
+  - failure handling: retry, notification
