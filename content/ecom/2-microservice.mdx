@@ -1,0 +1,80 @@
+---
+title: Microservices
+slug: /ecom/microservices
+---
+
+# Break into microservices
+
+<img src="/ecom/microservice-1.png" style={{ width: 900 }} alt="crate.io" />
+
+## Questions?
+
+- `Recommendation Service`
+
+  - why to use `cassandra`
+  - What is the input of this service?
+  - How it gets data?
+  - How it process those data and what technologies it uses internally?
+  - Give some concrete examples about output of this service?
+  - what are the main apis this service exposes?
+
+- `Item Service`
+
+  - why to use `mongodb`?
+  - what is it for?
+  - what are the main apis this service exposes?
+  - how other services use this service?
+
+- `Search Service`
+
+  - what apis this service exposes?
+  - why to use `elastic search`?
+  - where does `elastic search` get data from? how it processes?
+  - what is the rel btw this service with `Cart Service` and `Wishlist Service`? What do they have in common?
+  - why to use `mysql` for `Cart Service`
+  - why to use `mysql` for `Wishlist Service`
+  - how this service uses `Serviceability + TAT Service` and `User Service`
+
+- `Logistic Service`
+
+  - what is it for?
+
+- `Warehouse Service`
+
+  - what is it for?
+
+- `Spark Cluster`, `Hadoop Cluster`, `Spark Streaming`
+  - why do we need these?
+  - what are the alternatives?
+  - how data flows?
+
+<img src="/ecom/microservice-2.png" style={{ width: 900 }} alt="crate.io" />
+
+- `Order Taking Service`
+
+  - what is the main api? what are the params?
+  - what are the main steps? how this service communicates with other services along the way? steps order matter?
+  - what are the potentical issues can happen? how to avoid those?
+
+    - concurrency (race condition)
+    - failure at one step: payment, inventory, create order
+    - payment does not return anything, we don't know it's success or failure.
+
+  - what are the possible order status?
+  - how is it different from `Order Processing Service`?
+
+- `Inventory Service`
+
+  - what is it for?
+  - why to use `mysql`? what specific feature we need the most here?
+
+- `Order Processing Service`
+
+  - what is the main api get exposed? is this read-heavy or write-heavy?
+  - how this service handles millions of orders per day? how it connects to `Archival Service` and `Historical Order Service`
+  - why `Historical Order Service` uses `Cassandra`? what features does it need?
+
+- `Notification Service`
+  - Where it gets data from?
+  - What is mostly likely type of notif we need here?
+  - what technologies can it use?
