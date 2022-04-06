@@ -15,7 +15,7 @@ const config = {
     links: [{ text: '', link: '' }],
   },
   sidebar: {
-    forcedNavOrder: ['/', '/announcements', '/features', '/guides', '/api'],
+    forcedNavOrder: ['/', '/building-blocks', '/ecom', '/announcements', '/features', '/guides', '/api'],
     links: [{ text: '', link: '' }],
   },
   siteMetadata: {

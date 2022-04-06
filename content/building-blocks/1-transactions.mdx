@@ -1,0 +1,196 @@
+---
+title: Transactions
+slug: /building-blocks/transactions
+---
+
+## ACID: 4 properties of transaction
+
+- atomicity (abortability):
+  - indivisible unit,
+  - succeeds when all operations succeeds
+  - fails when at least one operation fails
+- consistency (correctness)
+  - if error happens in transaction, changes are reversed so data remains consistent
+- isolation
+  - before commit, updates are made on a snapshot of database instead of directly modifying database
+  - context: parallel transactions manipulate the same data
+  - diff isolation levels
+- durability
+  - once commit is done, all changes is persisted to disk and inreversible
+
+## Use cases
+
+- Transfer money: Tom transfers 100 bucks to Lisa
+
+```js
+// START transaction
+// take 100$ out of Tom's account
+// add 100$ to Lisa's account
+// COMMIT
+transaction(() => {
+  takeMoneyFrom('Tom', 100)
+  addMoneyFor('Lisa', 100)
+})
+```
+
+- Flight booking
+
+```js
+// START transaction
+// reserve a ticket
+// update availability
+// charge user's account
+// COMMIT
+transaction(() => {
+  reserveTicket(ticketId)
+  updateAvailability(ticketId)
+  chargeUser(userId)
+})
+```
+
+- Make an ecommerce order
+
+```js
+// START transaction
+// update availability
+// process payment
+// create order
+// COMMIT
+transaction(() => {
+  updateAvailability(productId)
+  chargeMoney(user, total)
+  createOrder(user, items)
+})
+```
+
+## Different Context
+
+- Single data store
+- Multiple data stores (distributed systems)
+
+## Questions
+
+- 2 phase locking vs 2 phase commit
+  - 2 phase commit: distributed transaction
+- Is ordering in transaction matter? depends on business
+
+## Concurrency control models
+
+- MVCC
+- Locking
+
+## 2 phase commit
+
+- Context: Transaction includes operations that modify multiple data stores.
+- Goal:
+  - transaction succeeds if all operations are successful
+  - if at least one operation fails, then transaction fails
+- components:
+  - 1 coordinator
+  - many participants
+- 2 phases:
+  - PREPARE
+    - coordinator sends commit reqs to different data sources, wait for ack
+    - if there's any failing commit, the whole transaction fails, rollback all commits
+  - COMMIT
+    - if all commits are successful, the transaction succeeds
+- pros and cons
+  - cons: low latency, blocking protocol (if coordinator or a participant goes down)
+  - pros: strong consistency
+- use cases:
+
+## Choosing dbs:
+
+- relational dbs:
+  - use cases: consistency, rollback
+- non-relational dbs:
+  - cassandra, dynamoDB: not consistent
+  - hBase, bigQuery: high latency
+
+## Lock types
+
+- exclusive lock (write lock)
+  - only one transaction can hold `write lock` at a time, no other transaction can hold `read lock`
+- shared lock (read lock)
+  - multiple transactions can hold `read lock` at the same time
+- Questions:
+  - db level or row level => diff modes: table, row, advisory (postgres)
+  - error or wait when can't take the lock => wait
+- https://www.youtube.com/watch?v=nuBi2XbHH18
+- why?
+  - consistency, isolation
+
+## 2 phase locking
+
+- use case: booking app
+- prepare data:
+
+```sql
+# Arrange
+create database netflix;
+create table movie (id serial, booked_by varchar(50), is_booked boolean not null);
+insert into movie (is_booked, booked_by) values (false, null);
+select * from movie;
+
+### Booking flow
+# (1): check movie exists
+select * from movie where id = 1;
+# (2): update availability
+update movie set is_booked = true, booked_by = 'thanh' where id = 1;
+
+### 2 phase locking
+#   thanh                        |   linh                               |
+#   START TRANSACTION            |                                      |
+#                                | START TRANSACTION                    |
+#   select movie 1 FOR UPDATE    |                                      | thanh take exclusive lock on movie 1 row
+#   |     ...               |    | |select movie 1 FOR UPDATE|(BLOCKED) |
+#   |     ...               |    | |           xxx           |          |
+#                                | |           xxx           |          |
+#   |update movie 1|             | |           xxx           |          |
+#   |     ...      |             | |           xxx           |          |
+#   |     ...      |             | |           xxx           |          |
+#        COMMIT                  | |           xxx           |          |  movie 1 { is_booked: true, booked_by: 'thanh' } (thanh's view)
+#                                | |           ...           |          |
+#                                | |           ...           |          |  movie 1 { is_booked: true, booked_by: 'thanh' } => !!! Ooops (linh's view)
+#                                | ROLL BACK
+```
+
+- double booking simulation:
+
+```sql
+### Double booking scenario 1
+#     thanh             |   linh                    |
+# 1   START TRANSACTION |                           |
+# 2                     | START TRANSACTION         |
+# 3   select movie 1    |                           |  movie 1 { is_booked: false, booked_by: null } => GOOD TO GO (thanh's view)
+# 4                     | select movie 1            |  movie 1 { is_booked: false, booked_by: null } => GOOD TO GO (linh's view)
+# 5   |update movie 1|  |                           |
+# 6   |     ...      |  | |update movie 1| (BLOCKED)|
+# 7   |     ...      |  | |     xxx      |          |
+# 8        COMMIT       | |     xxx      |          |  movie 1 { is_booked: true, booked_by: 'thanh' }
+# 9                     | |     ...      |          |
+# 10                    | |     ...      |          |
+# 11                    | COMMIT                    |  movie 2 { is_booked: true, booked_by: 'linh' }
+
+### Double booking scenario 1
+#     thanh             |   linh                    |
+# 1   START TRANSACTION |                           |
+# 2                     | START TRANSACTION         |
+# 3   select movie 1    |                           |  movie 1 { is_booked: false, booked_by: null } => GOOD TO GO (thanh's view)
+# 4                     |                           |  movie 1 { is_booked: false, booked_by: null } => GOOD TO GO (linh's view)
+# 5   |update movie 1|  |                           |
+# 6   |     ...      |  |                           |
+# 7   |     ...      |  |                           |  movie 1 { is_booked: true, booked_by: 'thanh' } (thanh's view)
+# 8                     | select movie 1            |  movie 1 { is_booked: false, booked_by: null } (linh's view) => GOOD TO GO
+# 9        COMMIT       |                           |
+# 10                    | |update movie 1|          |
+# 11                    | |     ...      |          |
+# 12                    | |     ...      |          |
+# 13                    | COMMIT                    |  movie 1 { is_booked: true, booked_by: 'linh' }
+```
+
+- use transaction alone won't prevent double-booking
+- each user has his own view about movie 1 row (MVCC)
+  - line 7: thanh sees movie 1 as being booked by himself
+  - line 9: linh sees movie as not being booked by anyone
+- idea to solve: after thanh starting his transaction, linh should not be able to even read the row until thanh completes his transaction
