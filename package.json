@@ -48,7 +48,10 @@
   "scripts": {
     "start": "gatsby develop",
     "build": "gatsby build --prefix-paths",
-    "deploy": "yarn build && gh-pages -d public"
+    "deploy": "yarn build && gh-pages -d public",
+    "db:up": "docker-compose up",
+    "db:down": "docker-compose down",
+    "db": "docker exec -it postgres_container psql --username postgres --password"
   },
   "devDependencies": {
     "gatsby-plugin-remove-trailing-slashes": "^2.0.11",
