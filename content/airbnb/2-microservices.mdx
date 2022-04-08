@@ -1,0 +1,46 @@
+---
+title: Microservices
+slug: /airbnb/microservices
+---
+
+<img src="/airbnb/microservice-1.png" style={{ width: 900 }} alt="crate.io" />
+
+## Questions
+
+- `Hotel Service`
+
+  - what apis does this expose?
+  - why to use `MySQL`? Why to use `Master-Slaves` here? How to optimize for heavy-reads, heavy-writes?
+  - what is the benefits of using `CDN`?
+  - What input this service might produce to kafka? who will consume it?
+  - Do we have a scalability problem here? why?
+  - Why we might not need a Redis Cache here? Though we do have one in `Booking Management Service`.
+
+- `Search Service`
+
+  - what apis does this expose? what can be searched?
+  - why to use `Elastic Search` here? Where does it get data from?
+  - Why does it highly related to `Booking Service`
+
+- `Booking Service`
+
+  - What apis does this expose?
+  - Why to use `MySQL` here? Does it have scalability problem? How it can be solved?
+  - How new booking being made effects `Search Service`
+  - Describe complete flow of booking? What problems can occur along the ways? How to handle them?
+
+- `Archival Service`
+
+  - What is the point of this at all?
+  - Why to use `Cassandra` here? What features of `Cassandra` do we need here?
+  - What kind of data does this store? How does this get data?
+
+- `Booking Management Service`
+
+  - Where does this get data from?
+  - What apis does this expose?
+  - How redis can help reduce traffic for MySQL? What cache invalidation strategy to be used? What happens when new booking gets added?
+
+- `Hadoop Cluster`
+  - Where does this get data from? What kind of data?
+  - How it processes data? What is the output?

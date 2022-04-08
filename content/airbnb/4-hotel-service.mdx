@@ -1,0 +1,19 @@
+---
+title: Hotel Service
+slug: /airbnb/hotel-service
+---
+
+## 1. DB design
+
+<img src="/airbnb/hotel-service-db.png" style={{ width: 900 }} alt="crate.io" />
+
+## 2. API design
+
+- `POST /hotels`: Create new hotel
+- `GET /hotels/:hotelId`: Get one hotel
+- `PUT /hotels/:hotelId`: Update one hotel
+- `PUT /hotels/:hotelId/rooms/:roomId`: Update one room of a hotel
+
+## 3. Questions
+
+- Why do we need `min_price` and `max_price`? How to determine current price?

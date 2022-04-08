@@ -1,0 +1,32 @@
+---
+title: Introduction
+slug: /airbnb/intro
+---
+
+# Design a booking app like Airbnb
+
+## Functional requirements
+
+- Hotel management:
+
+  - Update properites
+  - Onboard new hotels
+  - See bookings
+
+- Customers
+
+  - Search rooms: by date range, prices, tags, locations
+  - Book a room
+  - See my bookings (live and past)
+
+- Analytics
+
+## Non-functional requirements
+
+- Low latency (low response time)
+- High availability (Fault tolerant, high throughput)
+- High consistency: if a room is booked, user should see right away, other users can not see room has been booked
+- Scalable
+  - 500k hotels
+  - 10m rooms
+  - 1000 rooms / hotel on average (max 7500)
