@@ -1,0 +1,43 @@
+---
+title: High Level Design
+slug: /notifications/high-level
+---
+
+## Questions
+
+- Types of notifications?
+- What are 3 components of in-app notifications? in iOS and Android?
+- What uniquely identify a device in push notifications?
+- What are the components of a notification?
+- What are the advantages of using commercial email services instead of setting your own mail server?
+- How the system gathers user info? What and when does system store?
+
+## High-level design
+
+<img src="/notifications/naive.png" style={{ height: 400 }} alt="crate.io" />
+
+- What `Service 1 to N` could be?
+- What are the responsibilities of `Notification Server` here?
+- What are the problems with this design?
+- Propose a better design and tell how problems are solved?
+
+<img src="/notifications/better.png" style={{ height: 400 }} alt="crate.io" />
+
+- What are the responsibilities of `Notification Server` now?
+- Describe flow to send a notification?
+- How to implement worker? Is this only a infinite loop `while (true) {}`?
+- What problems message queue solves? How to implement it in real-life?
+
+## Deep dive
+
+- How to prevent data loss (reliability)?
+- What is the benefit of notification template?
+- Problem: users receive way too much notifications. Requested feature: allow users to pick the channels they want to receive notifications from?
+- How to solve above-problem from service-side perspective?
+- Problem: sometimes, there are too many notifications in queue so that current workers can process? How to deal with these situations?
+- Requirement: I want to understand about customer's behaviors based on their interactions. How to integrate analytics service to our system?
+
+## Ref
+
+- Cron job: https://www.youtube.com/watch?v=7Z1mgOxWTs8
+- Message queue + workers: https://www.youtube.com/watch?v=XL-nCvj2DO0
