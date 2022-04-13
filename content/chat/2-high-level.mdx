@@ -1,0 +1,35 @@
+---
+title: High-level design
+slug: /chat/high-level
+---
+
+## High-level design
+
+<img src="/chat/naive.png" style={{ width: 400 }} alt="crate.io" />
+
+- Describe message flow?
+- Differentiate stateful services and stateless services? When to use what?
+- Decision on communication stragegies? What are the options? pros and cons before coming to decision?
+- Starting with naive solution with single chat server? assume each connection needs 10K.
+  Then how much RAM needed to maintain 1M concurrent conn?
+- What are the problems with single server?
+
+<img src="/chat/better.png" style={{ width: 400 }} alt="crate.io" />
+
+- non-sql or sql or both?
+  - what data to store? can we categorize it? how does number of each type grow over time?
+  - other factors:
+    - proven apps of this kind,
+    - read-write patterns:
+      - how often users read new and old data, random access (search)
+      - read-write ratio
+    - long tail of data handling
+
+## Data modeling
+
+<img src="/chat/message-model-1.png" style={{ width: 200 }} alt="crate.io" />
+<img src="/chat/message-model-2.png" style={{ width: 200 }} alt="crate.io" />
+
+- Why not to use `createdAt` to determine messages order?
+- How to generate auto-incremented ids for non-sql? global or local? why?
+- What is the partition key? Why? (sharding)

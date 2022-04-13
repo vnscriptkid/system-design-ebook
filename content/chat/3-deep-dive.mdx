@@ -1,0 +1,37 @@
+---
+title: Deep-dive design
+slug: /chat/deep-dive
+---
+
+## Questions:
+
+- How to find the best chat server to connect to (in terms of geolocation, current traffic)
+- Describe message flow in one-to-one message:
+
+  - Assuming 2 users connected to 2 different chat servers
+  - How chat server to which recipient is connected, is determined?
+  - When Id is generated?
+  - When chat is persisted to database?
+  - What if recipient is offline/online?
+  - What factor could increase latency considering huge amount of real-time messages are sent? How to solve it?
+
+- How to sync messages between multiple devices of the same user?
+
+- Describe group-chat flow
+
+  - Assuming one group chat is at max 500 users.
+  - Prefer low-latency over redundancy. We want users are able to get new messages very fast.
+  - How it goes when A sends a message to a group of 3 users (the others are B, C)
+  - How it goes when B and C, each sends a message to a group that they share with A
+
+- How to implement presense features?
+  - What happens when user first logs in?
+  - What happens when user logs out then?
+  - Do we really need to persist presense status of user to database? Or where should we persist it?
+  - Challenge: Users often going online and ofline constantly could bombard server with updates? How to solve it?
+  - Let's say B,C,D are friends of A, when A goes online, how B,C,D are instantly aware of that.
+  - Consider an extreme case when a group has 100.000 members, how presense feature needs to change?
+
+## Ref:
+
+- https://ably.com/blog/message-queues-the-right-way
