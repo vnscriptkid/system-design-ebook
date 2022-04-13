@@ -1,0 +1,25 @@
+---
+title: Message queues
+slug: /building-blocks/message-queue
+---
+
+## Why?
+
+- Use resources effectively. How?
+  - Leverage async communication: client and server don't need to be present in the whole transaction
+  - Decouple system components through a queue
+
+## Use cases:
+
+- Sending transactional emails: might not need immediate response, no need to block server while sending email
+
+## Components:
+
+- Workers
+- Notifiers
+- Load balancing
+- Heartbeat
+
+## Ref:
+
+https://www.youtube.com/watch?v=oUJbuFMyBDk&list=PLMCXHnjXnTnvo6alSjVkgxV-VH6EPyvoX&index=5
