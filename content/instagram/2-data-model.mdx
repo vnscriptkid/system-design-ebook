@@ -1,0 +1,101 @@
+---
+title: Introduction
+slug: /instagram/data-model
+---
+
+## Data modeling
+
+```js
+
+users {
+    id: ID,
+    username: string,
+    password: string,
+    avatar: string,
+    friends: [ID],
+    posts: [ID]
+}
+
+posts {
+    id: ID,
+    author_id: ID,
+    caption: string,
+    low_quality_image: string,
+    high_quality_image: string,
+    total_likes: number,
+    liked_users: [ID]
+}
+
+// likes {
+//     src_user: ID,
+//     dest_user: ID
+// }
+
+feeds {
+    user_id: ID,
+    latest_posts: [ID], (~100 posts)
+    old_posts: [ID]
+}
+```
+
+## Design decisions:
+
+- why to choose `cassandra`?
+  - does this app need high-consistency?
+  - where do we need consistency in the app? How to add consistency for operation in cassandra?
+  - scalability? for each data models, how do they grow over time?
+- fanout pattern `feeds`
+  - pros and cons?
+  - why do we need `latest_posts` and `old_posts`?
+  - estimate size of a feed row when there's 100.000 posts
+  - what is the record size's limit of cassandra? what if there's more posts than the limit?
+  - how transfering posts from `latest_posts` to `old_posts` happen? (when 101st post is added)
+- `users`:
+  - keep `friends` list inside, why?
+  - keep `posts` list inside, why?
+- `posts`:
+  - keep 2 versions of image, why?
+  - keep `liked_users`, why?
+
+## Walkthrough
+
+- Describe photo upload flow?
+  - where photos are stored?
+- Describe flow of adding a post?
+
+  - what are the tables get effected?
+  - what is the naive solution to implement this? why is it bad? when it goes worse?
+  - what work could be defered? How to implement this?
+  - what could be cached here? what is the benefit? what cache invalidation strategies to use?
+  - what if user needs more than 100 + 100.000 posts? what are 2 directions can we go?
+
+- Describe flow user hitting like?
+
+  - why this can be defered?
+  - how post's owner gets notified?
+
+- Describe flow adding friends?
+
+  - should this be async or sync? why?
+
+- Describe flow of viewing my own photos?
+  - what is a must feature here when fetching an unbounded list? how to implement?
+
+## Perf:
+
+    - Geolocation: Why, how, explain?
+    - Caching: what could be cached (frequenly read, read by many peoples), how to cache them, invalidation strategies?
+    - Job queues
+        - what is the idea?
+        - what could be put in job queue? examples?
+        - how to make sure job queue is efficient?
+
+## Deeper
+
+- subsystems:
+  - database
+  - load balancer
+  - scale file storage
+- features:
+- more features:
+  - user can share their location
