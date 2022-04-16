@@ -23,6 +23,7 @@ const config = {
       '/notifications',
       '/youtube',
       '/chat',
+      '/sub-systems',
       '/announcements',
       '/features',
       '/guides',

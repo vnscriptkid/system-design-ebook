@@ -1,0 +1,40 @@
+---
+title: Invoices tracking
+slug: /sub-systems/invoice
+---
+
+## UI
+
+<img src="/sub-systems/invoice_ui_1.png" style={{ width: 400 }} alt="crate.io" />
+<img src="/sub-systems/invoice_ui_2.png" style={{ width: 400 }} alt="crate.io" />
+
+## DB Design
+
+<img src="/sub-systems/invoice_db.png" style={{ width: 800 }} alt="crate.io" />
+
+## Features
+
+- create new invoice
+
+## API
+
+- `POST /api/invoices`
+
+```sql
+/* customers data is static data, should not be edited or deleted */
+insert into customers (...) values (...);
+insert into invoices (...) values (...);
+insert into invoice_items (...) values (...);
+```
+
+- `GET /api/invoices`
+
+```sql
+/* 1st way: in one query */
+select * from invoices
+left join customers on invoices.customer_id = customers.id
+
+/* 2nd way: in 2 queries */
+select * from invoices;
+select * from customers where id in (...);
+```
