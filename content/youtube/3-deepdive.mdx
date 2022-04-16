@@ -1,0 +1,72 @@
+---
+title: Deep dive
+slug: /youtube/deepdive
+---
+
+## Video uploading
+
+<img src="/youtube/dag.png" style={{ width: 500 }} alt="crate.io" />
+
+- DAG (directed acyclic graph)
+  - why?
+  - features?
+  - how original video is broken down
+  - what does inspection step do?
+  - how thumbnails are created, by whom?
+  - what does watermark step do?
+  - example output of video encoding step?
+
+<img src="/youtube/dag-flow.png" style={{ width: 500 }} alt="crate.io" />
+
+- DAG flow:
+  - responsibilities of preprocessor:
+    - GOP: stands for? def? why GOP?
+    - build graph (nane + input + output): when to run in sequence or parallel
+    - cache: why to cache? when to use that cache? when cache is cleared?
+  - dag scheduler:
+    - why graph is split into stages?
+    - how tasks are put into task queues?
+  - resource manager:
+    - what are components? what does each one do?
+    - describe a flow step by step of how tasks are processed here
+  - task workers
+  - temporary storage
+
+## Optimizations
+
+- video uploading:
+  - GOP: in client side
+  - upload in parallel
+- upload server geographic position matters
+- parallelize dependent steps by message queues
+- optimize safety:
+  - how to ensure only authorized users can upload videos to right location
+  - what are the names of cloud services that provide this kind of protection
+    - amazon?
+    - google?
+    - microsoft?
+  - describe the new flow
+- optimize copyrights
+  - DRM: stands for?
+  - AES: how does this help? what config do we need to provide?
+  - visual watermarking
+- cost-saving:
+  - 20-80, categorize videos?
+  - build CDN, partner with ISPs
+
+## Error handling
+
+- categorize errors:
+  - recoverable error:
+    - transcode, action?
+    - client can't split vid to GOP, action?
+    - preprocessor error, action?
+    - scheduler error, action?
+    - queue down, action?
+    - api server down, action?
+    - meta cache down, action?
+    - meta db master down, action?
+    - meta db slaves down, action?
+  - non-recoverable error:
+    - examples: malformed vid
+    - action?

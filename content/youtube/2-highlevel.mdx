@@ -1,0 +1,58 @@
+---
+title: High-level design
+slug: /youtube/highlevel
+---
+
+## High-level design
+
+<img src="/youtube/high-level.png" style={{ width: 450 }} alt="crate.io" />
+
+- Where to persist videos?
+
+  - blob storage: stands for?
+  - what technology? Mysql, Postgres ...
+  - compare to CDN?
+  - why not to store raw videos?
+
+- Transcoding videos:
+
+  - what?
+  - how video input are different? why?
+  - why at all?
+  - what dest formats to choose? based on what?
+  - One or multiple dest formats?
+  - Should we store diff resolution for each format? why?
+  - How are they different from users?
+  - types for vid formats?
+  - diff btw vid formats?
+  - 2 components contained in an encoding format? what does each tell?
+
+- `Metadata DB` + `Metadata Cache`
+
+  - What does metadata consist of?
+  - Why to cache metadata? What invalidation strategies to use?
+
+- `Transcoding servers` + `Completion queues` + `Completion Handlers`
+
+  - Job of each component?
+  - Outsource jobs? why?
+
+- 2 blob storages:
+  - why not just one?
+
+## Walkthrough
+
+- Describe flow of uploading videos
+
+  - What could be executed in parallel? Why?
+
+- Update metadata?
+
+  - At what point in time?
+  - What metadata props get updated?
+
+- Video streaming?
+  - where videos are served from?
+  - streaming vs downloading?
+  - what are common video streaming protocols?
+  - choosing streaming protocol based on what factors?

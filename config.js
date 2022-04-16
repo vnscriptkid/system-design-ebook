@@ -21,6 +21,7 @@ const config = {
       '/ecom',
       '/airbnb',
       '/notifications',
+      '/youtube',
       '/chat',
       '/announcements',
       '/features',
