@@ -1,0 +1,25 @@
+---
+title: Sharding
+slug: /building-blocks/sharding
+---
+
+## Why?
+
+- when amount of data grows up, can not be fit into one single machine. it's time to split it up into smaller chunks,
+  and put each chunk into one single machine so that you can scale infinitely.
+
+## Problems?
+
+- Must be a consistent way of writing a new record to database
+- Must be a way to know find which machine a record resides in
+
+## Context?
+
+- Distributed Database
+- Distributed Cache
+- Distributed Key-value Store
+- Distributed Hash-table
+
+## Questions?
+
+- redis vs memcached vs rabbitMQ
