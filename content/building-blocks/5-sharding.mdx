@@ -20,6 +20,43 @@ slug: /building-blocks/sharding
 - Distributed Key-value Store
 - Distributed Hash-table
 
+## Strategies
+
+- Partition function (hash-based)
+
+  - the client decides which machine to go
+  - How: hash(key) % NUMBER_OF_MACHINES = #dest_machine
+  - cons:
+    - remapping (number of nodes changes)
+    - hotspot
+  - pros: simplicity
+
+- Dynamic sharding (key range-based)
+
+  - the job of determining which server to go is transfered to LocatorService
+  - LocatorService keeps track of key ranges with corresponding machine
+  - flow: (1) client ask LocatorService with provided key (2) LocatorService find which server to go for client with that given key
+  - pros:
+  - cons:
+    - SoF: use replicas
+
+- Consistent hashing
+  - why? avoid remapping everything
+  - how?
+    - use a ring, holding key range (0 -> N)
+    - distributes server evenly in the ring
+    - `hashFn(key) = hashValue` => X = hashValue % N
+    - locate X on the ring, find the nearest node clockwise
+  - optimize: virtual nodes
+
+## Grouping data
+
+- Context: social network app, vietnamese ppl will more likely to contact with vietnamese, other than US
+  - group by geographic location: asia cluster & america cluster => low latency
+  - avoid cross-cluster calls: a vietnamese has friend in us => replicate data on both sides
+
 ## Questions?
 
 - redis vs memcached vs rabbitMQ
+- diagram, and provide explicity numbers for partition function
+- context: partition function, key-value store. how remapping is implemented
