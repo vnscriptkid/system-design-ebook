@@ -1,0 +1,38 @@
+---
+title: Sharding
+slug: /building-blocks/api-gateway
+---
+
+- Context: microservices
+- What?
+
+  - External APIs
+  - Contract btw client and microservices
+  - Abstraction layer, remove deps of client on microservices
+
+- Techniques
+
+  - API Composition
+  - Monitoring
+  - Authentication
+  - Rate limiting
+
+- third-party:
+
+  - Zuul by netflix
+  - AWS
+
+- cons:
+
+  - slow down reqs
+  - complicated
+
+- Optimizations
+
+  - Need for fault-tolerance: more instances, with LBs upfront
+  - Separation of concerns:
+    - multiple types of api gateways (mobile, web)
+    - configure LB to redirect reqs to correct API gateway
+
+- Ref:
+  - https://www.youtube.com/watch?v=1vjOv_f9L8I
