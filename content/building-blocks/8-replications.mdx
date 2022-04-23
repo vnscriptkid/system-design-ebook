@@ -1,0 +1,20 @@
+---
+title: Replication architectures
+slug: /building-blocks/replication-arch
+---
+
+## Master-Slaves
+
+- 1 master + many slaves
+- write to master (propagated to slaves async)
+- read from slaves (optimize for reads)
+
+## Master-Master
+
+- all are the same
+- all can handle reads and writes
+
+## Questions
+
+- why replication (benefits, pros)?
+- cons of replication?
