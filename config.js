@@ -18,6 +18,7 @@ const config = {
     forcedNavOrder: [
       '/',
       '/building-blocks',
+      '/key-value-store',
       '/ecom',
       '/airbnb',
       '/notifications',

@@ -1,0 +1,67 @@
+---
+title: Deep dive
+slug: /key-value-store/deep-dive
+---
+
+## Data Partition
+
+- Why do we need this feature at all?
+- Differentiate partition vs physical machine? Is one machine a partition?
+- 2 challenges of data partitioning?
+- how consistent hashing solves those problems?
+
+## Data Replication
+
+- Why do we need replication? What we are trading?
+- How many machines to which data is replicated?
+- How to decide what machines to replicate to in hash ring?
+  - how to handle virtual nodes?
+  - what is the cons of replicating data to machines in the same data center? What could bring better reliability?
+
+## Consistency
+
+- How quorum consensus guarantees strict consistency?
+- Explain params: N, W, R
+- How to handle case: data are different amongst R reads? (data inconsistency)
+- W=1 means data is replicated to only one server? Clarify?
+- Why W + R > N provides strong consistency? Take an example of 5 replicas?
+- Demonstrate that even with strict consistency, there's still rooms for high availability (a node's failure)
+- Demonstrate that if threshold is crossed, reads and writes could be blocked?
+- Choose values that optimizes for fast reads, fast writes?
+- Why key-value stores are often favor of eventual-consistency?
+
+## Inconsistency resolution
+
+- Give concrete example when data inconsistency happens?
+- Explain `D([S1, v1], [S2, v2], ..., [Sn, vn])` in vector-clock?
+- What happens if data `D` is written to server `S(i)`
+
+## Handling failures
+
+- Explain the process of detecting failures using gossip protocol with heartbeats
+- Explain how "sloppy quorum" can improve availability?
+- Differentiate btw temporary and permanent failures?
+- How to handle permanent failures? How merkle tree helps?
+- How to handle data center outage?
+
+## Architectural diagram
+
+<img src="/key-value-store/arch.png" style={{ width: 500 }} alt="crate.io" />
+
+- What is the role of coordinator? Does it store data?
+- How to determine node to store data? How data is replicated?
+- What are the responsibilities of each node? Is every node the same?
+- How auto-scaling happens? What mechanism makes it possible?
+
+## Write path
+
+<img src="/key-value-store/write-path.png" style={{ width: 500 }} alt="crate.io" />
+
+- Why it needs to first write to commit log?
+- What is SSTables? Why do we need it?
+
+## Read path
+
+<img src="/key-value-store/read-path.png" style={{ width: 500 }} alt="crate.io" />
+
+- What is bloom filter? How does it help?

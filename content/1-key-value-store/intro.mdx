@@ -1,0 +1,27 @@
+---
+title: Introduction
+slug: /key-value-store/intro
+---
+
+## Requirements
+
+- Operations:
+  - `put(key, value)`
+  - `get(key)`
+
+## Naive
+
+- hashtable, single machine
+- cons:
+  - limited scalability
+  - single point of failure (low availability & no fault tolerance)
+
+## Components of distributed key-value store
+
+- data partition
+- data replication
+- consistency
+- inconsistency resolution
+- handling failures
+- write path
+- read path
