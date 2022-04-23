@@ -1,0 +1,30 @@
+---
+title: CAP Theorem
+slug: /building-blocks/cap
+---
+
+## Context
+
+- Distributed systems
+
+## Def
+
+- **Consistency**: at any times, all clients should see the same data
+- **Availability**: system always respond with data in case of nodes failure
+- **Partition Tolerance**: system continues to operate in case of nodes communication breaks
+
+## Statements
+
+- 3 props at the same time is impossible
+  - CP: consistency + partition tolerance
+  - AP: availability + partition tolerance
+  - AC: unrelistic, why? network breaks always happen in the real-world
+- PROBLEM boils down to **consistency** vs **availability**
+
+## Questions
+
+<img src="/building-blocks/cap.png" style={{ width: 500 }} alt="crate.io" />
+
+- when to choose consistency over availability? in what kind of systems?
+- in high-consistent system, how to handle case of data in-consistency due to network break?
+- if we choose availability? what is the worst thing could happen?
