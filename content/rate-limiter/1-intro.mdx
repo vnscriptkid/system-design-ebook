@@ -1,0 +1,20 @@
+---
+title: Rate limiter
+slug: /rate-limiter/intro
+---
+
+- why?
+  - prevent DoS
+  - reduce costs (esp. 3rd-party services)
+
+* Functional requirements
+
+  - Accurately limit excess reqs
+  - Show user errors
+  - based on: ip, userId, props ... be flexible
+
+* Non-functional requirements
+
+  - Low-latency
+  - Distributed
+  - Fault tolerant
