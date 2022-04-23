@@ -47,7 +47,7 @@ slug: /building-blocks/sharding
     - distributes server evenly in the ring
     - `hashFn(key) = hashValue` => X = hashValue % N
     - locate X on the ring, find the nearest node clockwise
-  - optimize: virtual nodes
+  - optimize: virtual nodes, why?
 
 ## Grouping data
 
@@ -60,3 +60,4 @@ slug: /building-blocks/sharding
 - redis vs memcached vs rabbitMQ
 - diagram, and provide explicity numbers for partition function
 - context: partition function, key-value store. how remapping is implemented
+- Diff sharding vs replication? Is this mutual-exclusive? Which one should i choose in real-world?
