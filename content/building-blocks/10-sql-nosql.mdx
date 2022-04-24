@@ -17,10 +17,20 @@ slug: /building-blocks/sql-nosql
 
 ## Types of NoSQL DBs
 
-- Key-Value Stores: S3, Redis, DynamoDB (amazon)
+- Key-Value Stores: S3 (object store - amazon), Redis, DynamoDB (amazon), memcached
+  - 2 types: (1) object stores (2) in-memory dbs
   - think of distributed hash table
   - features: replication, fault tolerance, scalability
   - `insert(key, JSON(...))`
 - Wide-columns DBs: HBase, Cassandra (also key-value store), BigTable
 - Document Stores: MongoDB
 - Graph DBs
+
+## Questions
+
+- object store (s3) vs file system
+
+  - object store: is key-value store, stores large objects, where files (images, videos) are determined by `key`
+  - file system: files are determined by paths, directories
+
+- redis vs memcached
