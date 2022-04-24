@@ -1,0 +1,26 @@
+---
+title: SQL / NoSQL
+slug: /building-blocks/sql-nosql
+---
+
+## Comparisons
+
+- SQL
+  - Structured, enforce data to follow fixed shema
+  - Change schema by migrations
+  - ACID
+  - Hard to scale horizontally, best to have data all in one machine
+- NoSQL
+  - Flexible, no structure, no schema
+  - Eventual consistency
+  - Inherently scalable, scale horizontally by sharding
+
+## Types of NoSQL DBs
+
+- Key-Value Stores: S3, Redis, DynamoDB (amazon)
+  - think of distributed hash table
+  - features: replication, fault tolerance, scalability
+  - `insert(key, JSON(...))`
+- Wide-columns DBs: HBase, Cassandra (also key-value store), BigTable
+- Document Stores: MongoDB
+- Graph DBs
