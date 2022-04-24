@@ -1,0 +1,52 @@
+---
+title: Wide-column Stores
+slug: /building-blocks/wide-column-stores
+---
+
+## Cassandra
+
+- key-value store, key used for sharding
+- one value could be determined by 3-dimensions: [row-id, column-family, column-id]
+
+```js
+// sql way
+users {
+    id: int,
+    name: varchar,
+}
+
+videos {
+    id: int,
+    link: varchar,
+    user_id: int
+}
+
+// mongodb way
+users {
+    id: ObjectId,
+    name: String,
+    videos: [ObjectId]
+}
+
+videos {
+    id: ObjectId,
+    link: String
+}
+
+// cassandra way
+users {
+    id, // row-key (for sharding)
+    name, // column-family
+    videos: [ // column-family
+        video1, // column-id
+        video2, // column-id
+        video3, // column-id
+        ...
+    ]
+}
+```
+
+## Cassandra Ref
+
+- https://tech.ebayinc.com/engineering/cassandra-data-modeling-best-practices-part-1/
+- https://tech.ebayinc.com/engineering/cassandra-data-modeling-best-practices-part-2/
