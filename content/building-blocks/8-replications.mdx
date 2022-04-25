@@ -3,18 +3,42 @@ title: Replication architectures
 slug: /building-blocks/replication-arch
 ---
 
-## Master-Slaves
+## Why?
+
+- Add reliability, fault-lolerance
+- Improve performance (increase throughput)
+
+## Replication models
+
+#### 1. Master-Slaves
 
 - 1 master + many slaves
-- write to master (propagated to slaves async)
+- write to master (propagated to slaves async => 1-way replication)
 - read from slaves (optimize for reads)
+- pros: simple to implement
+- cons: writes don't scale (only operate on 1 machine)
 
-## Master-Master
+#### 2. Master-Master
 
 - all are the same
 - all can handle reads and writes
+
+#### 3. Multi-Masters
+
+- cons: complex, need for conflict resolution
+- pros: writes do scale
+
+## Sync vs Async Replications
+
+- Sync:
+  - master gets blocked until data is written to n slaves (n is configurable)
+- Async:
+  - write considered done after it gets persisted to master
+  - subsequent updates to replicas is done by background jobs.
 
 ## Questions
 
 - why replication (benefits, pros)?
 - cons of replication?
+- in master-slaves, why to write only to master?
+- which models to choose?
