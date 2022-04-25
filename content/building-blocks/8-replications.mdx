@@ -6,7 +6,15 @@ slug: /building-blocks/replication-arch
 ## Why?
 
 - Add reliability, fault-lolerance
-- Improve performance (increase throughput)
+- Improve performance
+  - Increase throughput: 1 master handles reads, slaves handle writes
+  - Lower latency: region-based replicas
+
+## Why not? (cons)
+
+- Slow writes (sync)
+- Complex (multi-masters)
+- Eventual consistency (async)
 
 ## Replication models
 
