@@ -1,0 +1,21 @@
+---
+title: Deep-dive design
+slug: /id-gen/deep-dive
+---
+
+<img src="/id-gen/snowflake.png" style={{ height: 100 }} alt="crate.io" />
+
+## Datacenter IDs, machine IDs
+
+- what point in time this is set?
+- Can this be changed?
+
+## Timestamp
+
+- How IDs can be sortable by time?
+- Estimate amount time in years the timestamp can hold?
+- how custom epoch time works? why original epoch time halts at 2030?
+
+## Sequence number
+
+- How many sequences can be generated per millis?

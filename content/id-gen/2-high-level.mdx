@@ -1,0 +1,26 @@
+---
+title: High-level design
+slug: /id-gen/high-level
+---
+
+## Approach 1: multi-master replications
+
+- what feature to make use of?
+- how to keep multiple servers generating unique values? give concrete an example?
+- what are cons? considering time factor, across data centers, addding or removing servers?
+
+## Approach 2: UUID
+
+- how many bits? does it meet requirement? probability of collision?
+- do servers need to be aware of each other?
+
+## Approach 3: Ticket Server
+
+- pros and cons?
+
+## Approach 4: Snowflake
+
+<img src="/id-gen/snowflake.png" style={{ height: 100 }} alt="crate.io" />
+
+- what are the components? estimate amount of each?
+- how sequence number gets incremented?
