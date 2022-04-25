@@ -5,6 +5,6 @@ node_modules
 *.env
 
 .idea/
-playground/replication/pmaster_data
-playground/replication/pslave_data
-playground/replication/pslave_data_backup
+playground/replication_pg/pmaster_data
+playground/replication_pg/pslave_data
+playground/replication_pg/pslave_data_backup
