@@ -5,9 +5,9 @@ slug: /building-blocks/replication-arch
 
 ## Why?
 
-- Add reliability, fault-lolerance
+- Add reliability, fault-lolerance, high availability
 - Improve performance
-  - Increase throughput: 1 master handles reads, slaves handle writes
+  - Higher throughput: 1 master handles reads, slaves handle writes
   - Lower latency: region-based replicas
 
 ## Why not? (cons)
@@ -25,6 +25,9 @@ slug: /building-blocks/replication-arch
 - read from slaves (optimize for reads)
 - pros: simple to implement
 - cons: writes don't scale (only operate on 1 machine)
+- re-election:
+  - master goes down, amongst slaves, new master gets elected
+  - during which, writes get blocked
 
 #### 2. Master-Master
 
@@ -50,3 +53,17 @@ slug: /building-blocks/replication-arch
 - cons of replication?
 - in master-slaves, why to write only to master?
 - which models to choose?
+- why #nodes in replication set should be odd?
+
+## Mongodb-specific
+
+- Write concerns
+  - default: only write to master, replicating is async
+  - others: `majority`, `2`, ... (including master)
+- Read pref
+  - default: read from master
+  - others: `primaryPreferred`, `secondary` (potential eventual consistency), `nearest`
+
+## Ref
+
+- https://brandur.org/postgres-reads
