@@ -1,7 +1,5 @@
-# EOPI-JS docs repo
+# System Design Ebook
 
-This repo holds the documentation for Element of Programming Interview in JS
-
-It's built on a gatsby template I found and modified. I'd like to go through and convert the gatsby scaffolding code to typescript at some point. If anything in the documentation is unclear please feel free to open an issue or just change it & submit a pull request!
+This is a collection of notes that i've gathered while teaching myself System Design.
 
 [![Netlify Status](https://api.netlify.com/api/v1/badges/1392a565-db1d-4c2f-9e43-2f0f9275c881/deploy-status)](https://app.netlify.com/sites/hopeful-clarke-f36d36/deploys)
