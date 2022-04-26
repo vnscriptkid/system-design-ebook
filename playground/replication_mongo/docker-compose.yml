@@ -1,0 +1,54 @@
+version: '3.9'
+
+services:
+  mongodb1:
+    container_name: mongodb1
+    image: mongo:5.0
+    ports:
+      - 27017:27017
+    volumes:
+      - /Users/vnscriptkid/Desktop/Personal/SD-EBOOK/playground/replication_mongo/master_data:/data/db
+      - type: bind
+        source: /Users/vnscriptkid/Desktop/Personal/SD-EBOOK/playground/replication_mongo/rs-init.sh
+        target: /scripts/rs-init.sh
+    networks:
+      - mongors-network
+    links:
+      - mongodb2
+      - mongodb3
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=root
+      - MONGO_INITDB_ROOT_PASSWORD=123456
+    entrypoint: ['/usr/bin/mongod', '--bind_ip_all', '--replSet', 'myrepset']
+
+  mongodb2:
+    container_name: mongodb2
+    image: mongo:5.0
+    ports:
+      - 27018:27017
+    volumes:
+      - /Users/vnscriptkid/Desktop/Personal/SD-EBOOK/playground/replication_mongo/slave1_data:/data/db
+    networks:
+      - mongors-network
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=root
+      - MONGO_INITDB_ROOT_PASSWORD=123456
+    entrypoint: ['/usr/bin/mongod', '--bind_ip_all', '--replSet', 'myrepset']
+
+  mongodb3:
+    container_name: mongodb3
+    image: mongo:5.0
+    ports:
+      - 27019:27017
+    volumes:
+      - /Users/vnscriptkid/Desktop/Personal/SD-EBOOK/playground/replication_mongo/slave2_data:/data/db
+    networks:
+      - mongors-network
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=root
+      - MONGO_INITDB_ROOT_PASSWORD=123456
+    entrypoint: ['/usr/bin/mongod', '--bind_ip_all', '--replSet', 'myrepset']
+
+networks:
+  mongors-network:
+    driver: bridge

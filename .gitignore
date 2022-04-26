@@ -8,3 +8,7 @@ node_modules
 playground/replication_pg/pmaster_data
 playground/replication_pg/pslave_data
 playground/replication_pg/pslave_data_backup
+
+playground/replication_mongo/master_data
+playground/replication_mongo/slave1_data
+playground/replication_mongo/slave2_data

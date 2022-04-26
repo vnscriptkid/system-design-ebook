@@ -1,0 +1,9 @@
+POST http://localhost:8083/games
+Content-Type: application/json
+
+{
+    "name": "football",
+      "numOfPlayers": 11,
+      "numOfTeams": 2,
+      "requireAge": 18
+}
