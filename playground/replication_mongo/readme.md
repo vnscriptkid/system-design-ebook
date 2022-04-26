@@ -8,3 +8,4 @@
 ## ref:
 
 - https://blog.tericcabrel.com/mongodb-replica-set-docker-compose/
+- err: https://www.mongodbmanager.com/mongo-slaveok-error

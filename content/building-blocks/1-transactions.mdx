@@ -64,6 +64,65 @@ transaction(() => {
 })
 ```
 
+- Ecommerce inventory
+
+```js
+products {
+  id: int,
+  name: varchar,
+  price: float,
+}
+
+inventory {
+  product_id: int,
+  quantity: int
+}
+
+orders {
+  id: int,
+  user_id: int,
+  product_id: int,
+  price: int,
+  quantity: int,
+  createdAt: datetime
+}
+```
+
+```sql
+### purchase product flow
+### step 1: check product exists
+select * from products where id = 1;
+### step 2: update inventory
+update inventory set quantity = quantity - 10 where product_id = 1;
+### step 3: create new order
+insert into orders (user_id, product_id, price, quantity)
+values (99, 1, 10);
+```
+
+```js
+// ATOMICITY
+/*
+|              User 1          | InventoryRow(product_id=1, quantity=100)
+|                              |
+| START TRANSACTION            |
+|                              |
+|        checkProductExists    | ProductRow(id=1)
+|                              |
+|        updateInventory(-10)  | @@InventoryRow(product_id=1, quantity=90)
+|                              |
+|        xxxxx                 |
+|                              |
+| ROLLBACK                     | ^^InventoryRow(product_id=1, quantity=100)
+|                              |
+*/
+
+// CONSISTENCY
+
+// ISOLATION
+
+// DURABILITY
+```
+
 ## Different Context
 
 - Single data store
@@ -94,7 +153,7 @@ transaction(() => {
     - coordinator sends commit reqs to different data sources, wait for ack
     - if there's any failing commit, the whole transaction fails, rollback all commits
   - COMMIT
-    - if all commits are successful, the transaction succeeds
+    - if transaction COMMIT, data is guaranteed to be in the disk
 - pros and cons
   - cons: low latency, blocking protocol (if coordinator or a participant goes down)
   - pros: strong consistency
@@ -196,3 +255,43 @@ update movie set is_booked = true, booked_by = 'thanh' where id = 1;
   - line 7: thanh sees movie 1 as being booked by himself
   - line 9: linh sees movie as not being booked by anyone
 - idea to solve: after thanh starting his transaction, linh should not be able to even read the row until thanh completes his transaction
+
+## isolation levels
+
+- read committed (default) => works most of the time
+
+```js
+/*   
+|    User 1                  |            User 2            | A=1, B=2, C=3
+|                            |                              |
+|     start transaction      |                              |
+|                            |        start transaction     |
+|         A=A+1              |                              | @@A=2
+|                            |          B=B+1               | @@B=3
+|                            |          C=C+2               | @@C=5
+|                            |        commit                |  ^^ B=3, C=5
+|         Read B =>3         |                              |
+|                            |                              |
+*/
+```
+
+- repeatable read (MVCC) => expensive
+
+```sql
+begin transaction isolation level repeatable read;
+```
+
+```js
+/*   
+|    User 1                  |            User 2            | A=1, B=2, C=3
+|                            |                              |
+|     start transaction      |                              |
+|                            |        start transaction     |
+|         A=A+1              |                              | @@A=2
+|                            |          B=B+1               | @@B=3
+|                            |          C=C+2               | @@C=5
+|                            |        commit                |  ^^ B=3, C=5
+|         Read B =>2         |                              |
+|                            |                              |
+*/
+```
