@@ -1,0 +1,55 @@
+---
+title: Web Performance
+slug: /building-blocks/web-perf
+---
+
+## Backend Components/Techniques
+
+- Caching: static pages, feed
+- CDN
+- Compressing videos, images
+  - reduce size
+  - images: store low,medium,high-quality images
+- Geolocation
+  - reduce latency
+- Adding more machines
+- Load Balancer
+  - avoid SoF: have back-up
+  - lower latency: direct reqs to server that is free
+  - higher throughput: distribute reqs evenly to avoid bottleneck
+- Job Queue
+  - what to queue? things do not need immediate response/processing
+  - examples: hit like, send email, upload images (cpu intensive), notifications
+
+## Database Optimizations:
+
+- Indexing
+  - pros: faster reads
+  - cons: create redundancy, slower write (need to write to 2 separate tables)
+- Replication
+- Batching writes: TODO
+- Do Reads/Writes from workers: TODO
+- Lock as less as possible
+
+## Frontend
+
+- Minifying CSS, JS
+- Code splitting, Lazy loading
+- Load low-resolution first
+- Compressing images
+- Prefetching: reqs that are likely to be called next
+- HTTP caching
+
+```js
+// purchase flow
+/*
+    updateProductAvailability(product_id) => lock row level, keep it short
+
+    processPayment() => no need to keep the lock til here
+*/
+```
+
+## Questions?
+
+- Why not to offload task `adding friend` to job queue?
+- How reqs are redirected to nearby server (geolocation)? DNS load balander!?!
