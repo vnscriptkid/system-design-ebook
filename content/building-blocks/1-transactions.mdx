@@ -275,7 +275,7 @@ update movie set is_booked = true, booked_by = 'thanh' where id = 1;
 */
 ```
 
-- repeatable read (MVCC) => expensive
+- repeatable read (MVCC) => expensive, prevent phantom read in postgresql ONLY
 
 ```sql
 begin transaction isolation level repeatable read;
@@ -295,3 +295,5 @@ begin transaction isolation level repeatable read;
 |                            |                              |
 */
 ```
+
+- serializable (prevent phantom reads in all dbs): detect dependency btw concurrent users
