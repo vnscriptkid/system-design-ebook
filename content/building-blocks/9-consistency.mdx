@@ -13,5 +13,8 @@ All systems need consistency, but the level of consistency could be different
 ## Consistency in Contexts
 
 - Replication context: consider master-slaves architecture
-  - less **consistency**: (1) write to master, (2) write is successful, (3) propagation to slaves is done async
+  - less **consistency** (eventual consistency):
+    - (1) write to master,
+    - (2) write is successful,
+    - (3) propagation to slaves is done async
   - high **consistency**: (1) write to master, (2) propagate update to all slaves synchronously, (3) write is successfull
