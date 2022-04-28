@@ -1,0 +1,102 @@
+---
+title: Load Balancer
+slug: /building-blocks/load-balancer
+---
+
+## why?
+
+- make **horizontal scaling** possible (adding more app servers)
+- improve res time by handling reqs over not-busy servers, prevent bottleneck
+- fault tolerance
+  - LB stays in front of multiple app servers
+  - if one app server goes down, LB redirects req to live servers instead
+  - prevent SoF
+- hides internal servers
+- handle errors
+  - example: if all app servers are down, returns proper error to client.
+- provide reliability with server's health monitoring
+
+## what?
+
+- entrance to backend, LB coordinates requests, distributes reqs in an optimized way.
+- interface with outside and app servers => public IP of system
+
+## where to put LB?
+
+- in front of a distributed system
+  - cluster of app servers
+  - cluster of databases
+  - cluster of nodes
+  - cluster of clusters
+
+## types:
+
+- hardware: dedicated machine
+  - pros: high-perf, reliable, serve more servers
+- software: nginx, HAProxy
+  - modes: layer 4 (transport) && layer 7 (app)
+  - pros: cheaper, simple, easy to configure
+
+## modes
+
+- layer 4
+  - routing decisions based on source ip, dest ip (tcp headers)
+- layer 7
+  - complex routing decisions based on http headers + tcp headers: url, method, cookies...
+
+## features?
+
+- distribute reqs
+- monitoring, periordic health-check
+- auto-scaling up/down (cloud env)
+
+## server selection algorithms
+
+#### context 1: http req (rest) + stateless app servers + short-lived conn (long-lived)
+
+- Round-robin:
+  - one by one: A B C A B ...
+  - pros: simple, fair (in terms of #numOReqs)
+  - cons:
+    - does not count on server's load (is not proportional to #numOfReqs) => there are high-computantional reqs
+    - seeing every server the same,
+    - one client could be processed by multiple servers
+- Weighted round-robin:
+  - add more weight to server that is more powerful
+  - weights(A:3, B:2, C: 1) => A A A B B C A A A B B ...
+  - pros:
+    - simple, fair (in terms of #numOfReqs)
+    - do consider the fact servers are in different capacity
+  - cons:
+    - does not count on server's load (is not proportional to #numOfReqs)
+    - one client could be processed by multiple servers
+- factors:
+  - least connections: #active conn (**long-lived conn**)
+  - weighted response time: use periordic health-check
+    - slow res time => likely to be busy
+  - agent-based: a program sits in app server
+    - send metrics to LB: CPU, network traffic, disk ops, memory utilization...
+  - up/down status
+
+#### context 2: stateful app servers => reqs from one user must go to exact same server
+
+- Source IP Hashing (sessions stickyness)
+  - hash(IP_ADDRESS) % #numOfServers
+  - pros:
+    - one client (IP_ADDRESS) is processed by one app server (when we keep user's state in that machine)
+  - cons: hotspot
+  - use cases: user's shopping cart, server caching
+
+## problems?
+
+- single point of failures => back-up LB (HA Pair)
+
+## need clarifications?
+
+- DNS load balancer => resolve domain name to IP_ADDRESS of nearby server
+
+## quizz
+
+- how a req is handled when first hit LB? how src ip gets updated? how app servers see the reqs?
+- why app server must be stateless? (don't store user's state)? where state should be store?
+- pros, cons of stateless web servers?
