@@ -1,0 +1,27 @@
+version: '3'
+
+services:
+  nginx:
+    container_name: nginx-lb
+    image: nginx
+    volumes:
+      - type: bind
+        source: /Users/vnscriptkid/Desktop/Personal/SD-EBOOK/playground/load_balancer_nginx_nodes/nginx.conf
+        target: /etc/nginx/nginx.conf
+    ports:
+      - '80:80'
+
+  node1:
+    build: ./node1
+    ports:
+      - '8081:8080'
+
+  node2:
+    build: ./node2
+    ports:
+      - '8082:8080'
+
+  node3:
+    build: ./node3
+    ports:
+      - '8083:8080'

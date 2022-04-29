@@ -58,7 +58,10 @@
     "play:rep:mongo:down": "docker-compose --file playground/replication_mongo/docker-compose.yml down",
     "play:rep": "ts-node-dev playground/replication_mongo/client.ts",
     "play:nginx": "docker-compose --file playground/load_balancer_nginx/docker-compose.yml up",
-    "play:nginx:down": "docker-compose --file playground/load_balancer_nginx/docker-compose.yml down"
+    "play:nginx:down": "docker-compose --file playground/load_balancer_nginx/docker-compose.yml down",
+    "play:nginx:nodes:build": "docker-compose --file playground/load_balancer_nginx_nodes/docker-compose.yml build",
+    "play:nginx:nodes": "docker-compose --file playground/load_balancer_nginx_nodes/docker-compose.yml up --force-recreate",
+    "play:nginx:nodes:down": "docker-compose --file playground/load_balancer_nginx_nodes/docker-compose.yml down"
   },
   "devDependencies": {
     "gatsby-plugin-remove-trailing-slashes": "^2.0.11",
