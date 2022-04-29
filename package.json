@@ -56,7 +56,9 @@
     "db": "docker exec -it postgres_container psql --username postgres --password",
     "play:rep:mongo": "docker-compose --file playground/replication_mongo/docker-compose.yml up",
     "play:rep:mongo:down": "docker-compose --file playground/replication_mongo/docker-compose.yml down",
-    "play:rep": "ts-node-dev playground/replication_mongo/client.ts"
+    "play:rep": "ts-node-dev playground/replication_mongo/client.ts",
+    "play:nginx": "docker-compose --file playground/load_balancer_nginx/docker-compose.yml up",
+    "play:nginx:down": "docker-compose --file playground/load_balancer_nginx/docker-compose.yml down"
   },
   "devDependencies": {
     "gatsby-plugin-remove-trailing-slashes": "^2.0.11",

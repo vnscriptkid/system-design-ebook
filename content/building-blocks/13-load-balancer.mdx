@@ -41,8 +41,10 @@ slug: /building-blocks/load-balancer
 
 - layer 4
   - routing decisions based on source ip, dest ip (tcp headers)
+  - when? stream context
 - layer 7
   - complex routing decisions based on http headers + tcp headers: url, method, cookies...
+  - when? http context
 
 ## features?
 
@@ -100,3 +102,4 @@ slug: /building-blocks/load-balancer
 - how a req is handled when first hit LB? how src ip gets updated? how app servers see the reqs?
 - why app server must be stateless? (don't store user's state)? where state should be store?
 - pros, cons of stateless web servers?
+- proxy vs reverse proxy?
