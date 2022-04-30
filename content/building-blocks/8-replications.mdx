@@ -16,6 +16,7 @@ slug: /building-blocks/replication-arch
 - Slow writes (sync)
 - Complex (multi-masters)
 - Eventual consistency (async)
+- Add redundancy
 
 ## Replication models
 
@@ -64,6 +65,14 @@ slug: /building-blocks/replication-arch
 - Read pref
   - default: read from master
   - others: `primaryPreferred`, `secondary` (potential eventual consistency), `nearest`
+
+## kafka contexts
+
+- partitions are replicated over different broker instances (broker/machine)
+- replication factor defines how many partitions per replicas set
+- master-slaves models:
+  - one leader takes all reads-writes
+  - followers stay in sync with leader, are used in case of failure
 
 ## Ref
 
