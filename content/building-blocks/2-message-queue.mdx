@@ -5,21 +5,125 @@ slug: /building-blocks/message-queue
 
 ## Why?
 
-- Use resources effectively. How?
-  - Leverage async communication: client and server don't need to be present in the whole transaction
-  - Decouple system components through a queue
+- Sync communication:
+  - chain of deps, senders and receivers both must be present
+  - need for maintaining long-lived conn
+- Broadcast events to many services:
+  - one to many
+  - does not scale well with sync comm
+  - pub/sub comes to rescue
+- Traffic peaks
+  - many to one
+  - analytics service: receive events from all directions of the system
+
+## What?
+
+- Decouple deps between senders and receivers by a message queue
+- Do not block users for a long time,
+  - the request from user is pushed to the queue (hey, someone pls process it)
+  - a confirmation of processing can be returned right away
 
 ## Use cases:
 
-- Sending transactional emails: might not need immediate response, no need to block server while sending email
+- Sending transactional emails:
+  - might not need immediate response, no need to block server while sending email
+  - one to one
+- Sending propotional emails:
+  - no need for low latency
+  - pub/sub one to many
 
-## Components:
+## patterns:
 
-- Workers
-- Notifiers
-- Load balancing
-- Heartbeat
+- distributed queues: one to one (a message contains one sender and one receiver)
+- pubsub: one to many (a message contains one sender and many receivers)
+  - put each consumer in one consumer group? why?
+
+## components/features:
+
+- queueing
+  - no messages lost (if receivers can't keep up with traffic peaks)
+- routing
+- distributed systems:
+  - multi message brokers
+  - auto-scaling, fault-tolerant
+- pub/sub
+- data transformation
+- validation
+
+## cons:
+
+- complexity (distributed system)
+- higher latency
+
+## consuming messages methods
+
+- push
+  - message broker actively pushes messages to consumers
+- pull
+  - consumers actively takes out messages from message queue.
+  - use case: analytics service?
+    - it can control rate of messages to be consumed to prevent being overwhelmed
 
 ## Ref:
 
 https://www.youtube.com/watch?v=oUJbuFMyBDk&list=PLMCXHnjXnTnvo6alSjVkgxV-VH6EPyvoX&index=5
+
+## Questions?
+
+- job queue, message queue, message brokers?
+- differentiate message queue vs LB (reverse proxy)? both are intermediary component.
+  - LB: do not remove deps btw senders & receivers, no queueing capability.
+- rabbitMQ vs kafka?
+- pull: how it is scheduled, works like cronjob?
+- kafka message contains sender and receivers?
+- concrete examples for using distributed queues adn pubsub?
+- can partitions kafka of one topic stays in different machines.
+  - yes. each machine runs a broker instance.
+  - partitions of one topic can be spread accross machines
+  - better perf and scalability.
+- can one machine have many broker instances?
+  - one machine one broker
+- can one broker instance have many topics?
+- how to decide what partition in a topic to put message to?
+  - hash(key)
+- when global ordering matters? how to deal with that?
+  - one partition per topic
+- when global order does not matter?
+  - purchases from diff users,
+    - key: userId => purchases event from 1 user go to one partition (order maintained)
+    - example: `userA:refund` > `userA:purchase`
+- how to roughly estimate parallelism of one topics?
+  - number of partitions
+  - one topic has 5 partitions means 5 partitions can work in parallel (if we have at least 5 cores)
+- what decides number of partitions?
+  - number of messages
+  - is there a formular for doing so?
+- example of multiple publishers publish to one topic
+- what decides number of consumers in group? is this auto-scaling or configuable?
+- role of timestamp in message payload? how it can be used?
+- diagram replication factor N = 2, with 4 partition in 4 broker instances
+  - how partition is replicated
+
+## kafka specifics
+
+- message payload: key, value, timestamp
+- topics: category of messages
+- partitions:
+  - each is a queue
+  - one topic can have many partitions (collection of queues)
+  - exists for scaling reasons?
+    - horizontal scaling
+    - perf: parallelism
+  - record is appended to end of queue (published order) with seq num (offset)
+  - no global ordering btw partitions in a topic
+- consumer group
+  - can have multiple consumer instances => avoid bottleneck, less msg for one instance
+  - messages published to a group, are load-balanced amongts instances
+- replication factor
+  - N means each partition is replicated by N kafka brokers
+  - replicas set: 1 leader many followers (master-slaves arch)
+    - leader takes all reads, writes
+    - followers stay in sync with leader (take over if leader fails), ONLY used in case of failure
+- reliability:
+  - persists messages in disk
+  - keep messages after being consumed by consumers. why? retry, new consumers join, fast recover for failed brokers
