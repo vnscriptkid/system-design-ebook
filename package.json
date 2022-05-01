@@ -58,6 +58,8 @@
     "play:rep:mongo:down": "docker-compose --file playground/replication_mongo/docker-compose.yml down",
     "play:rep": "ts-node-dev playground/replication_mongo/client.ts",
     "play:kafka": "docker-compose --file playground/kafka/docker-compose.yml up",
+    "play:kafka:multi": "docker-compose --file playground/kafka_multi_brokers/docker-compose.yml up",
+    "play:kafka:multi:down": "docker-compose --file playground/kafka_multi_brokers/docker-compose.yml up",
     "play:kafka:bitnami": "docker-compose --file playground/kafka/docker-compose.bitnami.yml up",
     "play:kafka:bitnami:down": "docker-compose --file playground/kafka/docker-compose.bitnami.yml down",
     "play:kafka:down": "docker-compose --file playground/kafka/docker-compose.yml up",
