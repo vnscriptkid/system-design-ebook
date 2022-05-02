@@ -108,6 +108,9 @@ https://www.youtube.com/watch?v=oUJbuFMyBDk&list=PLMCXHnjXnTnvo6alSjVkgxV-VH6EPy
 - role of timestamp in message payload? how it can be used?
 - diagram replication factor N = 2, with 4 partition in 4 broker instances
   - how partition is replicated
+- how kafka knows a message has been consumed?
+  - autoCommit (by kafka) when msg is read: consumers might break before processing msg!!!
+  - consumers manually commit
 
 ## kafka specifics
 

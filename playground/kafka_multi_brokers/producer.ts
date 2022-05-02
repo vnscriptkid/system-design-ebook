@@ -6,7 +6,9 @@ export const produce = async (kafka: Kafka, topic) => {
 
   await producer.connect()
 
-  for (let i = 0; i < 10; i++) {
+  let i = 0
+
+  while (true) {
     const metaData = await producer.send({
       topic,
       messages: [
@@ -19,5 +21,15 @@ export const produce = async (kafka: Kafka, topic) => {
       ],
     })
     console.log(`Produced msg: `, metaData)
+    i++
+
+    await waitFor(2000)
   }
+}
+function waitFor(ms: number) {
+  return new Promise(resolve => {
+    setTimeout(() => {
+      resolve('DONE')
+    }, ms)
+  })
 }

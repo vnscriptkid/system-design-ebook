@@ -4,7 +4,8 @@
   "main": "index.js",
   "license": "MIT",
   "scripts": {
-    "start": "ts-node-dev index.ts"
+    "start": "ts-node-dev index.ts",
+    "consume": "ts-node-dev consumer.ts"
   },
   "dependencies": {
     "kafkajs": "^1.16.0",
