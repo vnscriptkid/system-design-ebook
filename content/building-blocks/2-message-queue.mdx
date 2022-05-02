@@ -85,7 +85,12 @@ https://www.youtube.com/watch?v=oUJbuFMyBDk&list=PLMCXHnjXnTnvo6alSjVkgxV-VH6EPy
   - one machine one broker
 - can one broker instance have many topics?
 - how to decide what partition in a topic to put message to?
-  - hash(key)
+
+  - implicit
+    - no partition specified: `hash(key)`
+    - no key specified: `round-robin`
+  - explicit(partition specified) => client must know about topic (coupling)
+
 - when global ordering matters? how to deal with that?
   - one partition per topic
 - when global order does not matter?
@@ -106,7 +111,7 @@ https://www.youtube.com/watch?v=oUJbuFMyBDk&list=PLMCXHnjXnTnvo6alSjVkgxV-VH6EPy
 
 ## kafka specifics
 
-- message payload: key, value, timestamp
+- message payload: key(optional), value, timestamp
 - topics: category of messages
 - partitions:
   - each is a queue

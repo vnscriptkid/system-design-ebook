@@ -1,29 +1,20 @@
 import { Kafka } from 'kafkajs'
+import { createTopic } from './create-topic'
+import { produce } from './producer'
 
 async function start() {
+  const kafka = new Kafka({
+    clientId: 'js-client',
+    brokers: ['localhost:9091', 'localhost:9092', 'localhost:9093'],
+  })
+
+  const TOPIC = 'events'
+
   try {
-    const kafka = new Kafka({
-      clientId: 'myapp',
-      brokers: ['localhost:39092', 'localhost:49092', 'localhost:59092'],
-    })
+    await createTopic(kafka, TOPIC)
 
-    const admin = kafka.admin()
-    console.log(`@@ connecting...`)
-    await admin.connect()
-    console.log(`^^ connected`)
-
-    // await admin.createTopics({
-    //   topics: [
-    //     {
-    //       topic: 'chat',
-    //       numPartitions: 1,
-    //     },
-    //   ],
-    // })
-
-    console.log(`^^ done creating topic`)
+    await produce(kafka, TOPIC)
   } catch (err) {
-    console.log(`!! oops`, err)
   } finally {
     process.exit(0)
   }
