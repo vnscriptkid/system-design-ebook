@@ -1,0 +1,13 @@
+{
+  "name": "reporting-service",
+  "version": "1.0.0",
+  "main": "index.js",
+  "license": "MIT",
+  "scripts": {
+    "start": "ts-node-dev index.ts"
+  },
+  "dependencies": {
+    "kafkajs": "^1.16.0",
+    "ts-node-dev": "^1.1.8"
+  }
+}
