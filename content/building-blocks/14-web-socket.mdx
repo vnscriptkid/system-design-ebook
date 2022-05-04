@@ -1,0 +1,26 @@
+---
+title: Load Balancer
+slug: /building-blocks/web-socket
+---
+
+## basics
+
+- alternative: polling (client periodically sends reqs to server asking for new data)
+- websockets: server proactively pushes new data to clients when there's new data
+- how: client-server maintains a persistent tcp connection
+- websocket is a level 7 protocol
+- use cases(real-time app): multi-player games, group chat (discord, slack, fb messenger), financial trading apps
+
+## naive setup
+
+- single ws server, acts as a pubsub itself
+
+## scalable setup
+
+- https://www.youtube.com/watch?v=gzIcGhJC8hA
+- multiple ws servers
+
+## questions?
+
+- full-duplex? bi-directional nature btw server-client of websocket
+- half-duplex? uni-directional of polling
