@@ -1,0 +1,30 @@
+---
+title: Estimation
+slug: /building-blocks/estimate
+---
+
+## why?
+
+- give you clues on decisions to make; selecting technologies, design decisions
+
+## use case 1: online/offline indicators
+
+#### data storage
+
+```js
+{
+    userId: int => 4 bytes,
+    isOnline: int => 4 bytes
+}
+```
+
+#### numOfUsers: `1 billion users` ~ `1 billion records * 8 bytes` ~ `8 billion bytes` ~ `8GB`
+
+=> fits in RAM => Redis > SQL DB
+
+#### workloads:
+
+- `100m online users` at a time
+- 1 user: `heartbeat / 5sec` ~ `0.2 heartbeats / sec`
+- 100m: `20m reqs / sec` => impossbile for 1 machine to handle
+- given 1 machine can handle `1m req / sec` => need 20 machines
