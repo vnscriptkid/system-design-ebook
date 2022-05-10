@@ -1,0 +1,27 @@
+---
+title: Last seen feature
+slug: /whatsapp/last-seen
+---
+
+## UI
+
+<img src="/whatsapp/last_seen.png" style={{ width: 300 }} alt="crate.io" />
+
+## Considerations
+
+- definition of online
+- what info to store and where
+- differentiate user activity and app activity
+
+## Design decisions
+
+- each time userA sends req to server, that is his `lastSeen`
+- online means `Date.now() - lastSeen > 20s`
+- what to store: mapping `{ userId: lastSeenAt }`
+- where to store: `PresenceService`
+- example flow:
+  - userA sends req to server to do something...
+  - server sends req to `PresenceService` to update `userA`'s lastSeen
+- user activity vs app activity
+  - user activity => do update lastSeen
+  - app activity => something happens automatically in background, not by user => do not update lastSeen

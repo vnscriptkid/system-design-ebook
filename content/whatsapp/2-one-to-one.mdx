@@ -63,4 +63,5 @@ slug: /whatsapp/one-to-one-chat
   - for these questions, it asks `SessionService`, this service stores mapping user-server (who is connected to which server)
     - msg is persisted to database (queue ?!?)
     - if `userB` is online and is connected to `gateway 2`, `SerssionService` routes the msg to `gateway 2`, then `gateway 2` sends msg back to `userB` through websocket (delivered)
+    - else `userB` is not online, send push notif through `NotificationService`
   - `userB` opens app and sees the msg (read)
