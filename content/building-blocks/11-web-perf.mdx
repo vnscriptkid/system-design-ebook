@@ -3,10 +3,17 @@ title: Web Performance
 slug: /building-blocks/web-perf
 ---
 
+## Caching levels:
+
+- api server: local cache, disk (save network calls, db i/o)
+- redis cluster
+- gateway, load balancer
+- database: materialized views, buffers, queries
+- CDN
+- http
+
 ## Backend Components/Techniques
 
-- Caching: static pages, feed
-- CDN
 - Compressing videos, images
   - reduce size
   - images: store low,medium,high-quality images
@@ -20,6 +27,7 @@ slug: /building-blocks/web-perf
 - Job Queue
   - what to queue? things do not need immediate response/processing
   - examples: hit like, send email, upload images (cpu intensive), notifications
+- Connection pooling
 
 ## Database Optimizations:
 
