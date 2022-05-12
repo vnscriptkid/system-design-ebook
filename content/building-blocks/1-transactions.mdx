@@ -6,18 +6,32 @@ slug: /building-blocks/transactions
 ## ACID: 4 properties of transaction
 
 - atomicity (abortability):
+
   - indivisible unit,
   - succeeds when all operations succeeds
   - fails when at least one operation fails
+
 - consistency (correctness)
-  - if error happens in transaction, changes are reversed so data remains consistent
+
+  - if error (violates rules, constraints) happens in transaction, changes are reversed so data remains consistent (correct state 1 -> correct state 2)
+
 - isolation
+
+  - context: concurrent transactions manipulate the same data
+  - isolation will not exist if db is hosted on single machine, runs on single thread
+  - when do we need this?
+    - financial operations: multiple senders send money to one receiver at the same time
+    - booking app: multiple customers book the same seat at the same time
+    - ecommerce system: multiple customers buy the same product at the same time
+  - why? ensure correctness and consistency
   - before commit, updates are made on a snapshot of database instead of directly modifying database
-  - context: parallel transactions manipulate the same data
   - diff isolation levels
+
 - durability
   - once commit is done, all changes is persisted to disk and inreversible
-  - how? WAL records (write-ahead log) must be written to WAL segment in the disk
+  - how?
+    - WAL records (write-ahead log) must be written to WAL segment in the disk before actual updates happen
+  - distributed settings: 2-phase commits
 
 ## Use cases
 
