@@ -11,3 +11,16 @@ slug: /building-blocks/concurrency-control
 - pestimistic:
   - locks
   - postgresql
+
+## lockings (postgres-specific)
+
+- explicit
+- implicity
+  - precondition: within transaction `begin ... commit`
+  - depending on what operation is? a lock is used implicitly
+    - `select` => shared lock
+    - `update` => exclusive lock
+
+## ref:
+
+- https://postgreshelp.com/postgresql-locks/#:~:text=Implicit%20locks%20mean%20the%20locks,with%20the%20WITH%20LOCK%20statement.
