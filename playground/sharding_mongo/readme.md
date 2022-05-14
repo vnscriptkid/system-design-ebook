@@ -1,0 +1,4 @@
+- ref
+  - https://github.com/minhhungit/mongodb-cluster-docker-compose
+  - https://github.com/justmeandopensource/learn-mongodb/blob/master/sharding/00-setup-sharding-doc.md
+  - https://www.youtube.com/watch?v=7Lp6R4CmuKE
